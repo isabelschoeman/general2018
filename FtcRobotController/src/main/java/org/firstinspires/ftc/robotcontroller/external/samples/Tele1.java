@@ -96,13 +96,13 @@ public class Tele1 extends OpMode{
 
             if (gamepad1.a) {
                 Servo1.setPosition(0.4);
-                Servo2.setPosition(0.7);
+                Servo2.setPosition(0.8);
 
             }
 
             if(gamepad1.b){
                 Servo1.setPosition(0.7);
-                Servo2.setPosition(0.5);
+                Servo2.setPosition(0.2);
             }
 
         }
