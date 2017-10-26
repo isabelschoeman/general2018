@@ -21,6 +21,7 @@ public class Ava extends OpMode{
     private DcMotor FrontRight = null;
     private DcMotor BackLeft = null;
     private DcMotor BackRight = null;
+    private DcMotor Pulley = null;
     private Servo Servo1 = null;
     private Servo Servo2 = null;
 
@@ -35,6 +36,7 @@ public class Ava extends OpMode{
         BackLeft  = hardwareMap.get(DcMotor.class, "BackLeft");
         FrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
         BackRight = hardwareMap.get(DcMotor.class, "BackRight");
+        Pulley = hardwareMap.get(DcMotor.class, "Pulley");
         Servo1 = hardwareMap.get(Servo.class, "Servo1");
         Servo2 = hardwareMap.get(Servo.class, "Servo2");
 
@@ -45,6 +47,7 @@ public class Ava extends OpMode{
         BackLeft.setDirection(DcMotor.Direction.REVERSE);
         FrontRight.setDirection(DcMotor.Direction.FORWARD);
         BackRight.setDirection(DcMotor.Direction.FORWARD);
+        Pulley.setDirection(DcMotor.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -85,6 +88,7 @@ public class Ava extends OpMode{
             //make sure left and right power are outside thres
             leftPower = Range.clip(drive + turn, -1.0, 1.0);
             rightPower = Range.clip(drive - turn, -1.0, 1.0);
+
             if(leftPower>threshold || leftPower<-threshold || rightPower<-threshold || rightPower>threshold) {
                 FrontLeft.setPower(leftPower);
                 BackLeft.setPower(leftPower);
@@ -133,10 +137,20 @@ public class Ava extends OpMode{
 
         }
 
+        else if(gamepad1.right_bumper){
+            Pulley.setPower(.9);
+        }
+        else if(gamepad1.left_bumper){
+            Pulley.setPower(-.9);
+        }
+
         else{
             Servo1.setPosition(0.4);
             Servo2.setPosition(0.6);
+            Pulley.setPower(0);
         }
+
+
 
 
 
