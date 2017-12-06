@@ -3,7 +3,9 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -22,8 +24,15 @@ public class Ava extends OpMode{
     private DcMotor BackLeft = null;
     private DcMotor BackRight = null;
     private DcMotor Pulley = null;
+    private DcMotor ThiccBoiPlacer = null;
     private Servo Servo1 = null;
     private Servo Servo2 = null;
+    private Servo ServoRelicRelease = null;
+    private Servo ServoHand = null;
+    private Servo ServoElbow = null;
+    private DcMotor ThiccBoiRetriever= null;
+    private Servo colorServo = null;
+    double startTime = runtime.milliseconds();
 
     @Override
     public void init() {
@@ -37,8 +46,14 @@ public class Ava extends OpMode{
         FrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
         BackRight = hardwareMap.get(DcMotor.class, "BackRight");
         Pulley = hardwareMap.get(DcMotor.class, "Pulley");
+        ThiccBoiPlacer = hardwareMap.get(DcMotor.class, "ThiccBoiPlacer");
+        ThiccBoiRetriever = hardwareMap.get(DcMotor.class, "ThiccBoiRetriever");
         Servo1 = hardwareMap.get(Servo.class, "Servo1");
         Servo2 = hardwareMap.get(Servo.class, "Servo2");
+        ServoRelicRelease = hardwareMap.get(Servo.class, "ServoRelicRelease");
+        ServoHand = hardwareMap.get(Servo.class, "ServoHand");
+        ServoElbow = hardwareMap.get(Servo.class, "ServoElbow");
+        colorServo = hardwareMap.get(Servo.class, "colorServo");
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -48,6 +63,16 @@ public class Ava extends OpMode{
         FrontRight.setDirection(DcMotor.Direction.FORWARD);
         BackRight.setDirection(DcMotor.Direction.FORWARD);
         Pulley.setDirection(DcMotor.Direction.FORWARD);
+        ThiccBoiPlacer.setDirection(DcMotor.Direction.FORWARD);
+        ThiccBoiRetriever.setDirection(DcMotor.Direction.FORWARD);
+
+        FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Pulley.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ThiccBoiRetriever.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ThiccBoiPlacer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -130,29 +155,87 @@ public class Ava extends OpMode{
         //Servo Stuff
 
 
-        if (gamepad1.a) {
+        if (gamepad2.a) {
+            Servo1.setPosition(0.6);
+            Servo2.setPosition(0.3);
 
-            Servo1.setPosition(0.7);
-            Servo2.setPosition(0.2);
-
-        }
-
-        else if(gamepad1.right_bumper){
-            Pulley.setPower(.9);
-        }
-        else if(gamepad1.left_bumper){
-            Pulley.setPower(-.9);
-        }
-
-        else{
+        } else if(gamepad2.y) {
             Servo1.setPosition(0.4);
             Servo2.setPosition(0.6);
+        } else if(gamepad2.b){
+            Servo1.setPosition(0.3);
+            Servo2.setPosition(0.7);
+        } else if(gamepad2.x){
+            Servo1.setPosition(0.4);
+            Servo2.setPosition(0.4);
+        }
+
+        //lift
+
+        if(gamepad2.right_bumper){
+            Pulley.setPower(.99);
+        }
+        else if(gamepad2.left_bumper){
+            Pulley.setPower(-.99);
+        }
+        else{
             Pulley.setPower(0);
         }
 
+        //relic placer
 
+        if(gamepad1.right_trigger > .4){
+            ThiccBoiPlacer.setPower(.55);
+            ThiccBoiRetriever.setPower(.9);
+        }
+        else if(gamepad1.left_trigger > .4){
+            ThiccBoiPlacer.setPower(-.9);
+            ThiccBoiRetriever.setPower(-.55);
+        }
+        else{
+            ThiccBoiPlacer.setPower(0);
+            ThiccBoiRetriever.setPower(0);
+        }
 
+        //relic release
+        if(gamepad1.a){
+            ServoRelicRelease.setPosition(1.00);
+        }
+        else if(gamepad1.y){
+            ServoRelicRelease.setPosition(0.00);
+        }
+        else{
+            ServoRelicRelease.setPosition(0.5);
+        }
+        //Relic total
+        //down and open
+        if(gamepad1.a){
+            ServoHand.setPosition(.65);
+            ServoElbow.setPosition(.25);
+        }
+        //up and open
+        else if(gamepad1.b){
+            ServoHand.setPosition(.9);
+            ServoElbow.setPosition(.9);
+        }
+        //up and closed
+        else if(gamepad1.x){
+            ServoHand.setPosition(0.05);
+            ServoElbow.setPosition(.9);
+        }
+        //down and closed
+        else if(gamepad1.y){
+            ServoHand.setPosition(.05);
+            ServoElbow.setPosition(.3);
+        }
 
+        //jewel servo
+        if(gamepad1.dpad_down){
+            colorServo.setPosition(.9);
+        }
+        else {
+            colorServo.setPosition(0.1);
+        }
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -163,7 +246,6 @@ public class Ava extends OpMode{
      * Code to run ONCE after the driver hits STOP
      */
     @Override
-
 
     public void stop() { telemetry.addData("Status", "\uD83D\uDED1"); }
 
