@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@Autonomous(name = "timed blue strafe auto", group = "Sensor")
+@Autonomous(name = "blue 1", group = "Sensor")
 public class strafeBlueAuto extends LinearOpMode {
 
     /**
@@ -92,7 +92,7 @@ public class strafeBlueAuto extends LinearOpMode {
         // sometimes it helps to multiply the raw RGB values with a scale factor
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
-        colorServo.setPosition(.70);
+        colorServo.setPosition(.90);
         //do stuff here!
         waitForStart();
 
@@ -105,80 +105,75 @@ public class strafeBlueAuto extends LinearOpMode {
             delay(1000);
             Pulley.setPower(0);
 
-            colorServo.setPosition(0.9);
+            colorServo.setPosition(0);
+
+            int red = 0;
+            int blue = 0;
+            int count = 0;
+            for (int i = 0; i < 50; i++) {
+                if (colorSensor.red() > colorSensor.blue()) {
+                    red++;
+                }
+                if (colorSensor.red() < colorSensor.blue()) {
+                    blue++;
+                }
+                telemetry.update();
+            }
+            telemetry.addData("Clear", colorSensor.alpha());
+            telemetry.addData("Red  ", colorSensor.red());
+            telemetry.addData("Green", colorSensor.green());
+            telemetry.addData("Blue ", colorSensor.blue());
+            telemetry.addData("Hue", hsvValues[0]);
+            telemetry.addData("RED", red);
+            telemetry.addData("BLUE", blue);
+
+            double jewelturntime = getRuntime();
+            if (red > blue) {
+                telemetry.addData("Red Wins!", colorSensor.red());
+                telemetry.update();
+                strafeLeft(.4,500);
+                colorServo.setPosition(0.9);
+                delay(50);
+                strafeLeft(.4,2000);
+                delay(50);
+                turnLeft(4,2000);
+                turnLeft(4,2000);
+            } else {
+                telemetry.addData("Blue Wins!", colorSensor.red());
+                telemetry.update();
+                strafeRight(.4,250);
+                colorServo.setPosition(0.9);
+                delay(50);
+                strafeLeft(.4, 2000);
+                strafeLeft(.4, 1250);
+                turnLeft(4,2000);
+                turnLeft(4,2000);
+            }
+
+            break;
+
+
+
+
+        }
 
             colorSensorCode(SCALE_FACTOR, hsvValues);
             strafeRight(0,0);
 
 
-            strafeLeft(.4, 1200);
-            turnRight(.5,1000);
-            turnRight(0,0);
-            //Lift lift
-            Pulley.setPower(-.9);
-            delay(500);
-            Pulley.setPower(0);
-            //drive forward
-            moveForward(.4, 500);
-            openGrabber();
-            delay(500);
-            turnRight(.3, 200);
-            //drive backward
-            moveBackward(.4, 100);
-            return;
-
-
         }
 
-    }
 
-    void colorSensorCode(double SCALE_FACTOR, float[] hsvValues){
+
+    void colorSensorCode(double SCALE_FACTOR, float[] hsvValues) {
         Color.RGBToHSV((int) (colorSensor.red() * SCALE_FACTOR),
                 (int) (colorSensor.green() * SCALE_FACTOR),
                 (int) (colorSensor.blue() * SCALE_FACTOR),
                 hsvValues);
-
-        int red = 0;
-        int blue = 0;
-        int count = 0;
-        for (int i = 0; i < 100; i++) {
-            if (colorSensor.red() > colorSensor.blue()) {
-                red++;
-            }
-            if (colorSensor.red() < colorSensor.blue()) {
-                blue++;
-            }
-            telemetry.update();
-        }
-
-        telemetry.addData("Clear", colorSensor.alpha());
-        telemetry.addData("Red  ", colorSensor.red());
-        telemetry.addData("Green", colorSensor.green());
-        telemetry.addData("Blue ", colorSensor.blue());
-        telemetry.addData("Hue", hsvValues[0]);
-        telemetry.addData("RED", red);
-        telemetry.addData("BLUE", blue);
-
-        double jewelturntime = getRuntime();
-        if (red > blue) {
-            telemetry.addData("Red Wins!", colorSensor.red());
-            telemetry.update();
-            turnRight(.5,500);
-        } else {
-            telemetry.addData("Blue Wins!", colorSensor.red());
-            telemetry.update();
-            turnLeft(.5,500);
-        }
-
-        colorServo.setPosition(0.1);
-
-        //turn back to initial position
-        if(red>blue) {
-            turnLeft(.5,500);
-        } else if(blue>red) {
-            turnRight(.5,500);
-        }
     }
+
+
+
 
     void colorServoDown(){
         colorServo.setPosition(0.8);

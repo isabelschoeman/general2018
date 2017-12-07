@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@Autonomous(name = "timed red strafe auto", group = "Sensor")
+@Autonomous(name = "red 1", group = "Sensor")
 public class strafeRedAuto extends LinearOpMode {
 
     /**
@@ -43,7 +43,6 @@ public class strafeRedAuto extends LinearOpMode {
      */
 
     ColorSensor colorSensor;
-    DistanceSensor sensorDistance;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -55,6 +54,7 @@ public class strafeRedAuto extends LinearOpMode {
     private DcMotor ThiccBoiPlacer = null;
     private Servo Servo1 = null;
     private Servo Servo2 = null;
+    private Servo colorServo = null;
 
 
     @Override
@@ -70,6 +70,8 @@ public class strafeRedAuto extends LinearOpMode {
         ThiccBoiPlacer = hardwareMap.get(DcMotor.class, "ThiccBoiPlacer");
         Servo1 = hardwareMap.get(Servo.class, "Servo1");
         Servo2 = hardwareMap.get(Servo.class, "Servo2");
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+        colorServo = hardwareMap.get(Servo.class, "colorServo");
 
         //WheelOne.setDirection(DcMotor.Direction.FORWARD);
         // Most robots need the motor on one side to be reversed to drive forward
@@ -81,36 +83,103 @@ public class strafeRedAuto extends LinearOpMode {
         Pulley.setDirection(DcMotor.Direction.FORWARD);
         ThiccBoiPlacer.setDirection(DcMotor.Direction.FORWARD);
 
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // sometimes it helps to multiply the raw RGB values with a scale factor
+        // to amplify/attentuate the measured values.
+        final double SCALE_FACTOR = 255;
+        colorServo.setPosition(.90);
         //do stuff here!
         waitForStart();
+
         while (opModeIsActive()) {
+
             //clamp on block
             closeGrabber();
             //Lift lift
             Pulley.setPower(.9);
             delay(1000);
             Pulley.setPower(0);
-            strafeRight(0, 0);
-            strafeLeft(.4, 1700);
-            turnRight(0,0);
-            turnRight(0,0);
-            //Lift lift
-            Pulley.setPower(-.9);
-            delay(500);
-            Pulley.setPower(0);
-            //drive forward
-            moveForward(.4, 500);
-            openGrabber();
-            delay(500);
-            turnRight(.5, 300);
-            //drive backward
-            moveBackward(.4, 100);
-            return;
+
+            colorServo.setPosition(0);
+
+            int red = 0;
+            int blue = 0;
+            int count = 0;
+            for (int i = 0; i < 50; i++) {
+                if (colorSensor.red() > colorSensor.blue()) {
+                    red++;
+                }
+                if (colorSensor.red() < colorSensor.blue()) {
+                    blue++;
+                }
+                telemetry.update();
+            }
+            telemetry.addData("Clear", colorSensor.alpha());
+            telemetry.addData("Red  ", colorSensor.red());
+            telemetry.addData("Green", colorSensor.green());
+            telemetry.addData("Blue ", colorSensor.blue());
+            telemetry.addData("Hue", hsvValues[0]);
+            telemetry.addData("RED", red);
+            telemetry.addData("BLUE", blue);
+
+            double jewelturntime = getRuntime();
+            if (red > blue) {
+                telemetry.addData("Red Wins!", colorSensor.red());
+                telemetry.update();
+                strafeRight(.4,500);
+                colorServo.setPosition(0.9);
+                delay(50);
+                strafeRight(.4,2000);
+                delay(50);
+                turnLeft(4,2000);
+                turnLeft(4,2000);
+            } else {
+                telemetry.addData("Blue Wins!", colorSensor.red());
+                telemetry.update();
+                strafeLeft(.4,250);
+                colorServo.setPosition(0.9);
+                delay(50);
+                strafeRight(.4, 2000);
+                strafeRight(.4, 1250);
+                turnLeft(4,2000);
+                turnLeft(4,2000);
+            }
+
+            break;
+
+
 
 
         }
 
+        colorSensorCode(SCALE_FACTOR, hsvValues);
+        strafeRight(0,0);
+
+
     }
+
+
+
+    void colorSensorCode(double SCALE_FACTOR, float[] hsvValues) {
+        Color.RGBToHSV((int) (colorSensor.red() * SCALE_FACTOR),
+                (int) (colorSensor.green() * SCALE_FACTOR),
+                (int) (colorSensor.blue() * SCALE_FACTOR),
+                hsvValues);
+    }
+
+
+
+
+    void colorServoDown(){
+        colorServo.setPosition(0.8);
+        delay(1000);
+    }
+
     void closeGrabber() {
         Servo1.setPosition(0.6);
         Servo2.setPosition(0.4);
@@ -175,8 +244,8 @@ public class strafeRedAuto extends LinearOpMode {
     }
     public void turnRight(double power, int time){
         FrontLeft.setPower(power);
-        FrontRight.setPower(power);
-        BackLeft.setPower(-power);
+        FrontRight.setPower(-power);
+        BackLeft.setPower(power);
         BackRight.setPower(-power);
         delay(time);
         FrontLeft.setPower(0);
@@ -186,8 +255,8 @@ public class strafeRedAuto extends LinearOpMode {
     }
     public void turnLeft(double power, int time){
         FrontLeft.setPower(-power);
-        FrontRight.setPower(-power);
-        BackLeft.setPower(power);
+        FrontRight.setPower(power);
+        BackLeft.setPower(-power);
         BackRight.setPower(power);
         delay(time);
         FrontLeft.setPower(0);
