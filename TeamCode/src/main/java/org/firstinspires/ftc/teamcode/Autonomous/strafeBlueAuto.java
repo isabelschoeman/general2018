@@ -134,7 +134,7 @@ public class strafeBlueAuto extends LinearOpMode {
                 strafeLeft(.4,500);
                 colorServo.setPosition(0.9);
                 delay(50);
-                strafeLeft(.4,2000);
+                strafeLeft(.4,1300);
                 delay(50);
                 turnRight(.6,2000);
                 moveForward(.6, 750);
@@ -154,7 +154,7 @@ public class strafeBlueAuto extends LinearOpMode {
                 delay(50);
                 strafeLeft(.4, 2000);
                 strafeLeft(.4, 1250);
-                turnRight(.6,2000);
+                turnRight(.6,1300);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);

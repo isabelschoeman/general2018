@@ -144,7 +144,7 @@ public class strafeRedAuto extends LinearOpMode {
                 delay(50);
                 strafeRight(.4,2000);
                 delay(50);
-                turnLeft(.6,2000);
+                turnLeft(.6,1300);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -159,12 +159,13 @@ public class strafeRedAuto extends LinearOpMode {
             else {
                 telemetry.addData("Blue Wins!", colorSensor.red());
                 telemetry.update();
-                strafeLeft(.4,250);
+                turnLeft(.4,100);
                 colorServo.setPosition(0.9);
                 delay(50);
+                turnRight(.5, 100);
                 strafeRight(.4, 2000);
                 strafeRight(.4, 1250);
-                turnLeft(.6,2000);
+                turnLeft(.6,1300);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -174,6 +175,8 @@ public class strafeRedAuto extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
+                delay(250);
+                moveBackward(.4,200);
             }
 
             break;

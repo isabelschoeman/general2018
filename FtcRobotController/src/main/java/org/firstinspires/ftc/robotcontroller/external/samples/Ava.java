@@ -159,10 +159,10 @@ public class Ava extends OpMode{
             Servo1.setPosition(0.6);
             Servo2.setPosition(0.3);
 
-        } else if(gamepad2.y) {
+        } else if(gamepad2.b) {
             Servo1.setPosition(0.4);
             Servo2.setPosition(0.6);
-        } else if(gamepad2.b){
+        } else if(gamepad2.y){
             Servo1.setPosition(0.3);
             Servo2.setPosition(0.7);
         } else if(gamepad2.x){
@@ -231,10 +231,10 @@ public class Ava extends OpMode{
 
         //jewel servo
         if(gamepad1.dpad_down){
-            colorServo.setPosition(.9);
+            colorServo.setPosition(.1);
         }
         else {
-            colorServo.setPosition(0.1);
+            colorServo.setPosition(0.9);
         }
 
         // Show the elapsed game time and wheel power.

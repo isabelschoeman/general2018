@@ -26,8 +26,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@Autonomous(name = "timed straight auto BLUE", group = "Sensor")
+@Autonomous(name = "BLUE 2", group = "Sensor")
 public class Auto_straight_blue extends LinearOpMode {
+    ColorSensor colorSensor;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor FrontLeft = null;
     private DcMotor FrontRight = null;
@@ -37,6 +38,7 @@ public class Auto_straight_blue extends LinearOpMode {
     private DcMotor ThiccBoiPlacer = null;
     private Servo Servo1 = null;
     private Servo Servo2 = null;
+    private Servo colorServo = null;
 
 
     @Override
@@ -52,6 +54,9 @@ public class Auto_straight_blue extends LinearOpMode {
         ThiccBoiPlacer = hardwareMap.get(DcMotor.class, "ThiccBoiPlacer");
         Servo1 = hardwareMap.get(Servo.class, "Servo1");
         Servo2 = hardwareMap.get(Servo.class, "Servo2");
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+        colorServo = hardwareMap.get(Servo.class, "colorServo");
+
 
         //WheelOne.setDirection(DcMotor.Direction.FORWARD);
         // Most robots need the motor on one side to be reversed to drive forward
@@ -64,6 +69,17 @@ public class Auto_straight_blue extends LinearOpMode {
         ThiccBoiPlacer.setDirection(DcMotor.Direction.FORWARD);
 
         //do stuff here!
+        float hsvValues[] = {0F, 0F, 0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // sometimes it helps to multiply the raw RGB values with a scale factor
+        // to amplify/attentuate the measured values.
+        final double SCALE_FACTOR = 255;
+        colorServo.setPosition(.90);
+        //do stuff here!
+        //do stuff here!
         waitForStart();
         while (opModeIsActive()) {
             //clamp on block
@@ -72,25 +88,78 @@ public class Auto_straight_blue extends LinearOpMode {
             Pulley.setPower(.9);
             delay(1000);
             Pulley.setPower(0);
-            strafeRight(0, 0);
-            strafeLeft(0, 0);
-            turnRight(0,0);
-            turnRight(0,0);
-            //drive forward
-            moveForward(.3, 750);
-            //Lift lift
-            Pulley.setPower(-.9);
-            delay(500);
-            Pulley.setPower(0);
-            moveForward(.3, 500);
-            //drop block
-            openGrabber();
-            delay(500);
-            moveBackward(.3, 200);
-            moveForward(.3, 350);
-            turnLeft(.5,300);
-            moveBackward(.3, 100);
-            return;
+
+            //dropping color servo
+            colorServo.setPosition(0);
+
+            //setting color variables
+            int red = 0;
+            int blue = 0;
+            int count = 0;
+
+            //checking jewel color
+            for (int i = 0; i < 50; i++) {
+                if (colorSensor.red() > colorSensor.blue()) {
+                    red++;
+                }
+                if (colorSensor.red() < colorSensor.blue()) {
+                    blue++;
+                }
+                telemetry.update();
+            }
+
+            //writing values to the phone
+            telemetry.addData("Clear", colorSensor.alpha());
+            telemetry.addData("Red  ", colorSensor.red());
+            telemetry.addData("Green", colorSensor.green());
+            telemetry.addData("Blue ", colorSensor.blue());
+            telemetry.addData("Hue", hsvValues[0]);
+            telemetry.addData("RED", red);
+            telemetry.addData("BLUE", blue);
+
+            double jewelturntime = getRuntime();
+
+            //if the jewel is red
+            if (red > blue) {
+                telemetry.addData("Red Wins!", colorSensor.red());
+                telemetry.update();
+                strafeLeft(.4,500);
+                colorServo.setPosition(0.9);
+                delay(50);
+                strafeLeft(.4,2000);
+                delay(50);
+                turnLeft(.6,750);
+                moveForward(.6, 750);
+                Pulley.setPower(-.9);
+                delay(750);
+                Pulley.setPower(0);
+                openGrabber();
+                delay(500);
+                moveBackward(.4,250);
+                delay(250);
+                moveForward(.4, 350);
+            }
+            //if the jewel is blue
+            else {
+                telemetry.addData("Blue Wins!", colorSensor.red());
+                telemetry.update();
+                strafeRight(.4,250);
+                colorServo.setPosition(0.9);
+                delay(50);
+                strafeLeft(.4, 2000);
+                strafeLeft(.4, 1250);
+                turnLeft(.6,1000);
+                moveForward(.6, 750);
+                Pulley.setPower(-.9);
+                delay(750);
+                Pulley.setPower(0);
+                openGrabber();
+                delay(500);
+                moveBackward(.4,250);
+                delay(250);
+                moveForward(.4, 350);
+            }
+            break;
             //drive backward
 
         }
