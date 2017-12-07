@@ -136,8 +136,16 @@ public class strafeBlueAuto extends LinearOpMode {
                 delay(50);
                 strafeLeft(.4,2000);
                 delay(50);
-                turnLeft(4,2000);
-                turnLeft(4,2000);
+                turnRight(.6,2000);
+                moveForward(.6, 750);
+                Pulley.setPower(-.9);
+                delay(750);
+                Pulley.setPower(0);
+                openGrabber();
+                delay(500);
+                moveBackward(.4,250);
+                delay(250);
+                moveForward(.4, 350);
             } else {
                 telemetry.addData("Blue Wins!", colorSensor.red());
                 telemetry.update();
@@ -146,8 +154,16 @@ public class strafeBlueAuto extends LinearOpMode {
                 delay(50);
                 strafeLeft(.4, 2000);
                 strafeLeft(.4, 1250);
-                turnLeft(4,2000);
-                turnLeft(4,2000);
+                turnRight(.6,2000);
+                moveForward(.6, 750);
+                Pulley.setPower(-.9);
+                delay(750);
+                Pulley.setPower(0);
+                openGrabber();
+                delay(500);
+                moveBackward(.4,250);
+                delay(250);
+                moveForward(.4, 350);
             }
 
             break;

@@ -105,11 +105,15 @@ public class strafeRedAuto extends LinearOpMode {
             delay(1000);
             Pulley.setPower(0);
 
+            //dropping color servo
             colorServo.setPosition(0);
 
+            //setting color variables
             int red = 0;
             int blue = 0;
             int count = 0;
+
+            //checking jewel color
             for (int i = 0; i < 50; i++) {
                 if (colorSensor.red() > colorSensor.blue()) {
                     red++;
@@ -119,6 +123,8 @@ public class strafeRedAuto extends LinearOpMode {
                 }
                 telemetry.update();
             }
+
+            //writing values to the phone
             telemetry.addData("Clear", colorSensor.alpha());
             telemetry.addData("Red  ", colorSensor.red());
             telemetry.addData("Green", colorSensor.green());
@@ -128,6 +134,8 @@ public class strafeRedAuto extends LinearOpMode {
             telemetry.addData("BLUE", blue);
 
             double jewelturntime = getRuntime();
+
+            //if the jewel is red
             if (red > blue) {
                 telemetry.addData("Red Wins!", colorSensor.red());
                 telemetry.update();
@@ -136,9 +144,19 @@ public class strafeRedAuto extends LinearOpMode {
                 delay(50);
                 strafeRight(.4,2000);
                 delay(50);
-                turnLeft(4,2000);
-                turnLeft(4,2000);
-            } else {
+                turnLeft(.6,2000);
+                moveForward(.6, 750);
+                Pulley.setPower(-.9);
+                delay(750);
+                Pulley.setPower(0);
+                openGrabber();
+                delay(500);
+                moveBackward(.4,250);
+                delay(250);
+                moveForward(.4, 350);
+            }
+            //if the jewel is blue
+            else {
                 telemetry.addData("Blue Wins!", colorSensor.red());
                 telemetry.update();
                 strafeLeft(.4,250);
@@ -146,8 +164,16 @@ public class strafeRedAuto extends LinearOpMode {
                 delay(50);
                 strafeRight(.4, 2000);
                 strafeRight(.4, 1250);
-                turnLeft(4,2000);
-                turnLeft(4,2000);
+                turnLeft(.6,2000);
+                moveForward(.6, 750);
+                Pulley.setPower(-.9);
+                delay(750);
+                Pulley.setPower(0);
+                openGrabber();
+                delay(500);
+                moveBackward(.4,250);
+                delay(250);
+                moveForward(.4, 350);
             }
 
             break;
