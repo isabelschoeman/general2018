@@ -86,7 +86,7 @@ public class Auto_straight_blue extends LinearOpMode {
             closeGrabber();
             //Lift lift
             Pulley.setPower(.9);
-            delay(1000);
+            delay(500);
             Pulley.setPower(0);
 
             //dropping color servo
@@ -123,12 +123,15 @@ public class Auto_straight_blue extends LinearOpMode {
             if (red > blue) {
                 telemetry.addData("Red Wins!", colorSensor.red());
                 telemetry.update();
-                strafeLeft(.4,500);
+                strafeLeft(.4,250);
                 colorServo.setPosition(0.9);
-                delay(50);
-                strafeLeft(.4,2000);
-                delay(50);
+                delay(500);;
+                strafeLeft(.4,1650);
+                delay(1000);
+                moveForward(.4, 750);
+                delay(500);
                 turnLeft(.6,750);
+                delay(500);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -138,17 +141,26 @@ public class Auto_straight_blue extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
+                delay(500);
+                moveBackward(.4,250);
             }
             //if the jewel is blue
             else {
                 telemetry.addData("Blue Wins!", colorSensor.red());
                 telemetry.update();
-                strafeRight(.4,250);
-                colorServo.setPosition(0.9);
-                delay(50);
+                turnLeft(.4, 100);
+                delay(100);
+                colorServo.setPosition(0.95);
+                delay(100);
+                turnRight(.4, 100);
+                delay(100);
                 strafeLeft(.4, 2000);
                 strafeLeft(.4, 1250);
-                turnLeft(.6,1000);
+                delay(1000);
+                moveForward(.4, 750);
+                delay(500);
+                turnLeft(.6,750);
+                delay(500);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -158,6 +170,8 @@ public class Auto_straight_blue extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
+                delay(500);
+                moveBackward(.4,250);
             }
             break;
             //drive backward
@@ -229,8 +243,8 @@ public class Auto_straight_blue extends LinearOpMode {
     }
     public void turnRight(double power, int time){
         FrontLeft.setPower(power);
-        FrontRight.setPower(power);
-        BackLeft.setPower(-power);
+        FrontRight.setPower(-power);
+        BackLeft.setPower(power);
         BackRight.setPower(-power);
         delay(time);
         FrontLeft.setPower(0);
@@ -240,8 +254,8 @@ public class Auto_straight_blue extends LinearOpMode {
     }
     public void turnLeft(double power, int time){
         FrontLeft.setPower(-power);
-        FrontRight.setPower(-power);
-        BackLeft.setPower(power);
+        FrontRight.setPower(power);
+        BackLeft.setPower(-power);
         BackRight.setPower(power);
         delay(time);
         FrontLeft.setPower(0);

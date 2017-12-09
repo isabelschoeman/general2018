@@ -89,7 +89,7 @@ public class Auto_straight_red extends LinearOpMode {
             closeGrabber();
             //Lift lift
             Pulley.setPower(.9);
-            delay(1000);
+            delay(500);
             Pulley.setPower(0);
 
             //dropping color servo
@@ -129,9 +129,12 @@ public class Auto_straight_red extends LinearOpMode {
                 strafeRight(.4,500);
                 colorServo.setPosition(0.9);
                 delay(50);
-                strafeRight(.4,2000);
+                strafeRight(.4,1500);
                 delay(50);
-                turnRight(.6,000);
+                moveForward(.6, 500);
+                delay(500);
+                turnRight(.6,750);
+                delay(750);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -141,6 +144,8 @@ public class Auto_straight_red extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
+                moveBackward(.4,100);
+
             }
             //if the jewel is blue
             else {
@@ -150,8 +155,12 @@ public class Auto_straight_red extends LinearOpMode {
                 colorServo.setPosition(0.9);
                 delay(50);
                 strafeRight(.4, 2000);
-                strafeRight(.4, 1250);
-                turnRight(.6,1000);
+                strafeRight(.4, 1000);
+                delay(1000);
+                moveForward(.4,500);
+                delay(500);
+                turnRight(.6,750);
+                delay(750);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -232,8 +241,8 @@ public class Auto_straight_red extends LinearOpMode {
     }
     public void turnRight(double power, int time){
         FrontLeft.setPower(power);
-        FrontRight.setPower(power);
-        BackLeft.setPower(-power);
+        FrontRight.setPower(-power);
+        BackLeft.setPower(power);
         BackRight.setPower(-power);
         delay(time);
         FrontLeft.setPower(0);
@@ -243,8 +252,8 @@ public class Auto_straight_red extends LinearOpMode {
     }
     public void turnLeft(double power, int time){
         FrontLeft.setPower(-power);
-        FrontRight.setPower(-power);
-        BackLeft.setPower(power);
+        FrontRight.setPower(power);
+        BackLeft.setPower(-power);
         BackRight.setPower(power);
         delay(time);
         FrontLeft.setPower(0);

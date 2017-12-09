@@ -102,7 +102,7 @@ public class strafeRedAuto extends LinearOpMode {
             closeGrabber();
             //Lift lift
             Pulley.setPower(.9);
-            delay(1000);
+            delay(500);
             Pulley.setPower(0);
 
             //dropping color servo
@@ -144,7 +144,7 @@ public class strafeRedAuto extends LinearOpMode {
                 delay(50);
                 strafeRight(.4,2000);
                 delay(50);
-                turnLeft(.6,1300);
+                turnRight(.6,1300);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -159,13 +159,14 @@ public class strafeRedAuto extends LinearOpMode {
             else {
                 telemetry.addData("Blue Wins!", colorSensor.red());
                 telemetry.update();
-                turnLeft(.4,100);
+                //turnLeft(.4,100);
+                strafeLeft(.4, 250);
                 colorServo.setPosition(0.9);
                 delay(50);
-                turnRight(.5, 100);
+                //turnRight(.5, 100);
                 strafeRight(.4, 2000);
                 strafeRight(.4, 1250);
-                turnLeft(.6,1300);
+                turnRight(.6,1300);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -272,10 +273,10 @@ public class strafeRedAuto extends LinearOpMode {
         BackRight.setPower(0);
     }
     public void turnRight(double power, int time){
-        FrontLeft.setPower(power);
-        FrontRight.setPower(-power);
-        BackLeft.setPower(power);
-        BackRight.setPower(-power);
+        FrontLeft.setPower(-power);
+        FrontRight.setPower(power);
+        BackLeft.setPower(-power);
+        BackRight.setPower(power);
         delay(time);
         FrontLeft.setPower(0);
         FrontRight.setPower(0);
@@ -283,10 +284,10 @@ public class strafeRedAuto extends LinearOpMode {
         BackRight.setPower(0);
     }
     public void turnLeft(double power, int time){
-        FrontLeft.setPower(-power);
-        FrontRight.setPower(power);
-        BackLeft.setPower(-power);
-        BackRight.setPower(power);
+        FrontLeft.setPower(power);
+        FrontRight.setPower(-power);
+        BackLeft.setPower(power);
+        BackRight.setPower(-power);
         delay(time);
         FrontLeft.setPower(0);
         FrontRight.setPower(0);

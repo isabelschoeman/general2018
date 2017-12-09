@@ -57,6 +57,8 @@ public class strafeBlueAuto extends LinearOpMode {
     private Servo colorServo = null;
 
 
+
+
     @Override
     public void runOpMode() {
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -83,6 +85,11 @@ public class strafeBlueAuto extends LinearOpMode {
         Pulley.setDirection(DcMotor.Direction.FORWARD);
         ThiccBoiPlacer.setDirection(DcMotor.Direction.FORWARD);
 
+        FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
 
@@ -92,7 +99,7 @@ public class strafeBlueAuto extends LinearOpMode {
         // sometimes it helps to multiply the raw RGB values with a scale factor
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
-        colorServo.setPosition(.90);
+        colorServo.setPosition(.95);
         //do stuff here!
         waitForStart();
 
@@ -102,7 +109,7 @@ public class strafeBlueAuto extends LinearOpMode {
             closeGrabber();
             //Lift lift
             Pulley.setPower(.9);
-            delay(1000);
+            delay(500);
             Pulley.setPower(0);
 
             colorServo.setPosition(0);
@@ -131,12 +138,19 @@ public class strafeBlueAuto extends LinearOpMode {
             if (red > blue) {
                 telemetry.addData("Red Wins!", colorSensor.red());
                 telemetry.update();
-                strafeLeft(.4,500);
-                colorServo.setPosition(0.9);
-                delay(50);
-                strafeLeft(.4,1300);
-                delay(50);
-                turnRight(.6,2000);
+                turnRight(.4, 100);
+                delay(100);
+                colorServo.setPosition(0.95);
+                delay(100);
+                turnLeft(.4, 125);
+                delay(100);
+                strafeLeft(.5,1250);
+                delay(100);
+                moveForward(.5,250);
+                delay(250);
+                strafeLeft(.5,1750);
+                delay(500);
+                turnLeft(.6,1500);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
                 delay(750);
@@ -146,14 +160,18 @@ public class strafeBlueAuto extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
+                delay(500);
+                moveBackward(.4,250);
             } else {
                 telemetry.addData("Blue Wins!", colorSensor.red());
                 telemetry.update();
-                strafeRight(.4,250);
-                colorServo.setPosition(0.9);
-                delay(50);
+                turnLeft(.4,100);
+                colorServo.setPosition(0.95);
+                delay(500);
+                turnRight(.4, 100);
+                delay(200);
                 strafeLeft(.4, 2000);
-                strafeLeft(.4, 1250);
+                strafeLeft(.4, 1000);
                 turnRight(.6,1300);
                 moveForward(.6, 750);
                 Pulley.setPower(-.9);
@@ -164,6 +182,8 @@ public class strafeBlueAuto extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
+                delay(500);
+                moveBackward(.4,250);
             }
 
             break;
@@ -260,8 +280,8 @@ public class strafeBlueAuto extends LinearOpMode {
     }
     public void turnRight(double power, int time){
         FrontLeft.setPower(power);
-        FrontRight.setPower(power);
-        BackLeft.setPower(-power);
+        FrontRight.setPower(-power);
+        BackLeft.setPower(power);
         BackRight.setPower(-power);
         delay(time);
         FrontLeft.setPower(0);
@@ -271,8 +291,8 @@ public class strafeBlueAuto extends LinearOpMode {
     }
     public void turnLeft(double power, int time){
         FrontLeft.setPower(-power);
-        FrontRight.setPower(-power);
-        BackLeft.setPower(power);
+        FrontRight.setPower(power);
+        BackLeft.setPower(-power);
         BackRight.setPower(power);
         delay(time);
         FrontLeft.setPower(0);

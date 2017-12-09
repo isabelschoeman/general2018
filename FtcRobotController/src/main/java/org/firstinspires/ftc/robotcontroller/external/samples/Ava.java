@@ -234,7 +234,7 @@ public class Ava extends OpMode{
             colorServo.setPosition(.1);
         }
         else {
-            colorServo.setPosition(0.9);
+            colorServo.setPosition(0.95);
         }
 
         // Show the elapsed game time and wheel power.
