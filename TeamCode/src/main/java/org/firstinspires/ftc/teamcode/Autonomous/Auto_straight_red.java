@@ -131,11 +131,11 @@ public class Auto_straight_red extends LinearOpMode {
                 delay(50);
                 strafeRight(.4,1500);
                 delay(50);
-                moveForward(.6, 500);
+                moveForward(.6, 70);
                 delay(500);
                 turnRight(.6,750);
                 delay(750);
-                moveForward(.6, 750);
+                moveForward(.6, 250);
                 Pulley.setPower(-.9);
                 delay(750);
                 Pulley.setPower(0);
@@ -144,7 +144,7 @@ public class Auto_straight_red extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
-                moveBackward(.4,100);
+                moveBackward(.4,300);
 
             }
             //if the jewel is blue
@@ -155,9 +155,9 @@ public class Auto_straight_red extends LinearOpMode {
                 colorServo.setPosition(0.9);
                 delay(50);
                 strafeRight(.4, 2000);
-                strafeRight(.4, 1000);
+                strafeRight(.4, 500);
                 delay(1000);
-                moveForward(.4,500);
+                moveForward(.4,400);
                 delay(500);
                 turnRight(.6,750);
                 delay(750);
@@ -170,6 +170,7 @@ public class Auto_straight_red extends LinearOpMode {
                 moveBackward(.4,250);
                 delay(250);
                 moveForward(.4, 350);
+                moveBackward(.4,300);
             }
             break;
             //drive backward
