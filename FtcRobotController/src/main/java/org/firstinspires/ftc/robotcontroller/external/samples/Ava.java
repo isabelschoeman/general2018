@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 //@Disabled
 @TeleOp(name="laeo_is_better", group="Iterative Opmode")
-public class Ava extends OpMode{
+public class Ava extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -24,14 +24,16 @@ public class Ava extends OpMode{
     private DcMotor BackLeft = null;
     private DcMotor BackRight = null;
     private DcMotor Pulley = null;
-    private DcMotor ThiccBoiPlacer = null;
+    private DcMotor NomLeft = null;
+    private DcMotor NomRight = null;
+    //private DcMotor ThiccBoiPlacer = null;
     private Servo Servo1 = null;
-    private Servo Servo2 = null;
-    private Servo ServoRelicRelease = null;
-    private Servo ServoHand = null;
-    private Servo ServoElbow = null;
-    private DcMotor ThiccBoiRetriever= null;
-    private Servo colorServo = null;
+    //private Servo Servo2 = null;
+    //private Servo ServoRelicRelease = null;
+    //private Servo ServoHand = null;
+    //private Servo ServoElbow = null;
+    //private DcMotor ThiccBoiRetriever= null;
+    //private Servo colorServo = null;
     double startTime = runtime.milliseconds();
 
     @Override
@@ -41,19 +43,21 @@ public class Ava extends OpMode{
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        FrontLeft  = hardwareMap.get(DcMotor.class, "FrontLeft");
-        BackLeft  = hardwareMap.get(DcMotor.class, "BackLeft");
+        FrontLeft = hardwareMap.get(DcMotor.class, "FrontLeft");
+        BackLeft = hardwareMap.get(DcMotor.class, "BackLeft");
         FrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
         BackRight = hardwareMap.get(DcMotor.class, "BackRight");
         Pulley = hardwareMap.get(DcMotor.class, "Pulley");
-        ThiccBoiPlacer = hardwareMap.get(DcMotor.class, "ThiccBoiPlacer");
-        ThiccBoiRetriever = hardwareMap.get(DcMotor.class, "ThiccBoiRetriever");
+        NomLeft = hardwareMap.get(DcMotor.class, "NomLeft");
+        NomRight = hardwareMap.get(DcMotor.class, "NomRight");
+        //ThiccBoiPlacer = hardwareMap.get(DcMotor.class, "ThiccBoiPlacer");
+        //ThiccBoiRetriever = hardwareMap.get(DcMotor.class, "ThiccBoiRetriever");
         Servo1 = hardwareMap.get(Servo.class, "Servo1");
-        Servo2 = hardwareMap.get(Servo.class, "Servo2");
-        ServoRelicRelease = hardwareMap.get(Servo.class, "ServoRelicRelease");
-        ServoHand = hardwareMap.get(Servo.class, "ServoHand");
-        ServoElbow = hardwareMap.get(Servo.class, "ServoElbow");
-        colorServo = hardwareMap.get(Servo.class, "colorServo");
+        //Servo2 = hardwareMap.get(Servo.class, "Servo2");
+        //ServoRelicRelease = hardwareMap.get(Servo.class, "ServoRelicRelease");
+        //ServoHand = hardwareMap.get(Servo.class, "ServoHand");
+        //ServoElbow = hardwareMap.get(Servo.class, "ServoElbow");
+        //colorServo = hardwareMap.get(Servo.class, "colorServo");
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -63,16 +67,18 @@ public class Ava extends OpMode{
         FrontRight.setDirection(DcMotor.Direction.FORWARD);
         BackRight.setDirection(DcMotor.Direction.FORWARD);
         Pulley.setDirection(DcMotor.Direction.FORWARD);
-        ThiccBoiPlacer.setDirection(DcMotor.Direction.FORWARD);
-        ThiccBoiRetriever.setDirection(DcMotor.Direction.FORWARD);
+        NomLeft.setDirection(DcMotor.Direction.FORWARD);
+        NomRight.setDirection(DcMotor.Direction.REVERSE);
+        //ThiccBoiPlacer.setDirection(DcMotor.Direction.FORWARD);
+        //ThiccBoiRetriever.setDirection(DcMotor.Direction.FORWARD);
 
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Pulley.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        ThiccBoiRetriever.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        ThiccBoiPlacer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //ThiccBoiRetriever.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //ThiccBoiPlacer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -96,15 +102,23 @@ public class Ava extends OpMode{
      */
 
     public void loop() {
-            double threshold = 0.4;
+        double threshold = 0.5;
 
         if (gamepad1.right_stick_x < -threshold || gamepad1.right_stick_x > threshold) {
-            FrontLeft.setPower(gamepad1.right_stick_x);
-            FrontRight.setPower(-gamepad1.right_stick_x);
-            BackLeft.setPower(-gamepad1.right_stick_x);
-            BackRight.setPower(gamepad1.right_stick_x);
-        }
-        else if (gamepad1.left_stick_y < -threshold || gamepad1.left_stick_y >threshold || gamepad1.left_stick_x<-threshold || gamepad1.left_stick_x>threshold) {
+            if(gamepad1.left_bumper){
+                FrontLeft.setPower(-gamepad1.right_stick_x/2);
+                FrontRight.setPower(-gamepad1.right_stick_x/2);
+                BackLeft.setPower(gamepad1.right_stick_x/2);
+                BackRight.setPower(gamepad1.right_stick_x/2);
+            }
+            else{
+                FrontLeft.setPower(-gamepad1.right_stick_x);
+                FrontRight.setPower(-gamepad1.right_stick_x);
+                BackLeft.setPower(gamepad1.right_stick_x);
+                BackRight.setPower(gamepad1.right_stick_x);
+            }
+
+        } else if (gamepad1.left_stick_y < -threshold || gamepad1.left_stick_y > threshold || gamepad1.left_stick_x < -threshold || gamepad1.left_stick_x > threshold) {
             double leftPower;
             double rightPower;
 
@@ -114,76 +128,89 @@ public class Ava extends OpMode{
             leftPower = Range.clip(drive + turn, -1.0, 1.0);
             rightPower = Range.clip(drive - turn, -1.0, 1.0);
 
-            if(leftPower>threshold || leftPower<-threshold || rightPower<-threshold || rightPower>threshold) {
-                FrontLeft.setPower(leftPower);
-                BackLeft.setPower(leftPower);
-                FrontRight.setPower(rightPower);
-                BackRight.setPower(rightPower);
-            }
-            else {
+            if (leftPower > threshold || leftPower < -threshold || rightPower < -threshold || rightPower > threshold) {
+                if(gamepad1.left_bumper){
+                    FrontLeft.setPower(leftPower/2);
+                    BackLeft.setPower(leftPower/2);
+                    FrontRight.setPower(rightPower/2);
+                    BackRight.setPower(rightPower/2);
+                }else{
+                    FrontLeft.setPower(leftPower);
+                    BackLeft.setPower(leftPower);
+                    FrontRight.setPower(rightPower);
+                    BackRight.setPower(rightPower);
+                }
+
+            } else {
                 FrontRight.setPower(0);
                 FrontLeft.setPower(0);
                 BackLeft.setPower(0);
                 BackRight.setPower(0);
                 //   double leftPower;
                 //   double rightPower;
-
-
-
             }
 
 
         }
         // else if (gamepad1.right_stick_y < -threshold || gamepad1.right_stick_y> threshold) {
-       //     FrontLeft.setPower(-gamepad1.right_stick_x);
+        //     FrontLeft.setPower(-gamepad1.right_stick_x);
         //    FrontRight.setPower(-gamepad1.right_stick_x);
         //    BackLeft.setPower(-gamepad1.right_stick_x);
-       // }
-         else {
+        // }
+        else {
             FrontRight.setPower(0);
             FrontLeft.setPower(0);
             BackLeft.setPower(0);
             BackRight.setPower(0);
-         //   double leftPower;
-         //   double rightPower;
+            //   double leftPower;
+            //   double rightPower;
+        }
 
-
-
+        //nom motors
+        double nomPower = .9;
+        if (gamepad1.right_trigger > .2) {
+            NomRight.setPower(nomPower);
+            NomLeft.setPower(nomPower);
+            //NomLeft.setPower(.9);
+        } else if (gamepad1.right_bumper) {
+            //NomRight.setPower(-.9);
+            NomLeft.setPower(-nomPower);
+            NomRight.setPower(-nomPower);
+        }
+        else{
+            NomRight.setPower(0);
+            NomLeft.setPower(0);
         }
 
 
         //Servo Stuff
 
 
-        if (gamepad2.a) {
-            Servo1.setPosition(0.6);
-            Servo2.setPosition(0.3);
-
-        } else if(gamepad2.b) {
-            Servo1.setPosition(0.4);
-            Servo2.setPosition(0.6);
-        } else if(gamepad2.y){
+        if (gamepad1.b) {
             Servo1.setPosition(0.3);
-            Servo2.setPosition(0.7);
-        } else if(gamepad2.x){
-            Servo1.setPosition(0.4);
-            Servo2.setPosition(0.4);
+            //Servo2.setPosition(0.3);
+        } else if (gamepad1.x) {
+            Servo1.setPosition(0.5);
+            //Servo2.setPosition(0.6);
+        } else if (gamepad1.y) {
+            Servo1.setPosition(0.9);
+            //Servo2.setPosition(0.7);
+        }else{
+
         }
 
-        //lift
+            //lift
 
-        if(gamepad2.right_bumper){
-            Pulley.setPower(.99);
-        }
-        else if(gamepad2.left_bumper){
-            Pulley.setPower(-.99);
-        }
-        else{
+        if (gamepad1.dpad_up) {
+            Pulley.setPower(.9);
+        } else if (gamepad1.dpad_down) {
+            Pulley.setPower(-.9);
+        } else {
             Pulley.setPower(0);
         }
 
-        //relic placer
-
+            //relic placer
+/*
         if(gamepad1.right_trigger > .4){
             ThiccBoiPlacer.setPower(.55);
             ThiccBoiRetriever.setPower(.9);
@@ -236,17 +263,13 @@ public class Ava extends OpMode{
         else {
             colorServo.setPosition(0.95);
         }
+        */
 
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.update();
-
-    }
+            // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
     /*
      * Code to run ONCE after the driver hits STOP
      */
-    @Override
-
-    public void stop() { telemetry.addData("Status", "\uD83D\uDED1"); }
-
+    }
 }
