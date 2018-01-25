@@ -87,6 +87,7 @@ public class Ava extends OpMode {
 
     @Override
     public void init_loop() {
+        Servo1.setPosition(0.3);
     }
 
     /*
@@ -186,13 +187,13 @@ public class Ava extends OpMode {
         //Servo Stuff
 
 
-        if (gamepad1.b) {
-            Servo1.setPosition(0.3);
+        if (gamepad2.b) {
+            Servo1.setPosition(0.35);
             //Servo2.setPosition(0.3);
-        } else if (gamepad1.x) {
+        } else if (gamepad2.x) {
             Servo1.setPosition(0.5);
             //Servo2.setPosition(0.6);
-        } else if (gamepad1.y) {
+        } else if (gamepad2.y) {
             Servo1.setPosition(0.9);
             //Servo2.setPosition(0.7);
         }else{
@@ -201,7 +202,7 @@ public class Ava extends OpMode {
 
             //lift
 
-        if (gamepad1.dpad_up) {
+        if (gamepad2.dpad_up) {
             Pulley.setPower(.9);
         } else if (gamepad1.dpad_down) {
             Pulley.setPower(-.9);
