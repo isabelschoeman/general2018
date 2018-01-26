@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@Autonomous(name = "blue 1", group = "Sensor")
+@Autonomous(name = "strafe blue", group = "Sensor")
 public class strafeBlueAuto extends LinearOpMode {
 
     /**
